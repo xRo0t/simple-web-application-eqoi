@@ -1,0 +1,20 @@
+{
+  "name": "biw-client",
+  "version": "0.1.0",
+  "description": "BIW Client - a clean Minecraft client launcher",
+  "main": "frontend/main/main.js",
+  "author": "BIW",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev"
+  },
+  "dependencies": {
+    "@xmcl/core": "^2.15.1",
+    "@xmcl/installer": "^6.1.2",
+    "lucide": "^1.22.0"
+  },
+  "devDependencies": {
+    "electron": "^42.5.0"
+  }
+}

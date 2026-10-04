@@ -1,0 +1,24 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.biw.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "client": [
+    "MixinInGameHud",
+    "MixinGameRenderer",
+    "MixinMinecraftClient",
+    "MixinChatHud",
+    "MixinChatScreen",
+    "MixinEntityRenderer",
+    "MixinPlayerEntityRenderer",
+    "MixinClientPlayerEntity",
+    "MixinClientPlayerInteractionManager",
+    "AccessorMinecraftClient",
+    "AccessorEntityRenderDispatcher",
+    "InvokerMinecraftClient",
+    "InvokerEntityRenderer"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

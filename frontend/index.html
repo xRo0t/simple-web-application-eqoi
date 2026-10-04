@@ -1,111 +1,866 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sooryn</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' file:; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:;"
+    />
+    <title>BIW Client</title>
+    <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <div class="app-shell">
-      <aside class="rail" aria-label="Primary navigation">
-        <div class="brand">
-          <span class="brand-mark">S</span>
-          <span>Sooryn</span>
+      <header class="titlebar">
+        <div class="titlebar__drag">
+          <div class="brand-mark" aria-hidden="true">
+            <span></span>
+          </div>
+          <div class="titlebar__brand">
+            <strong>BIW Client</strong>
+            <span id="appVersion">Minecraft client</span>
+          </div>
         </div>
-        <nav class="nav-list">
-          <button class="nav-item active" type="button" aria-label="Dashboard">Dashboard</button>
-          <button class="nav-item" type="button" aria-label="Files">Files</button>
-          <button class="nav-item" type="button" aria-label="Settings">Settings</button>
+        <div class="titlebar__status">
+            <span class="status-pill">
+              <i data-lucide="shield-check"></i>
+              Protected
+            </span>
+          <span class="status-pill status-pill--hot">
+            <i data-lucide="zap"></i>
+            Ready
+          </span>
+        </div>
+        <div class="window-controls" aria-label="Window controls">
+          <button class="icon-btn" id="minimizeBtn" type="button" aria-label="Minimize" title="Minimize">
+            <i data-lucide="minus"></i>
+          </button>
+          <button class="icon-btn" id="maximizeBtn" type="button" aria-label="Maximize" title="Maximize">
+            <i data-lucide="square"></i>
+          </button>
+          <button class="icon-btn icon-btn--danger" id="closeBtn" type="button" aria-label="Close" title="Close">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+      </header>
+
+      <aside class="sidebar">
+        <div class="profile-card">
+          <div class="avatar avatar--player">B</div>
+          <div>
+            <strong id="accountName">Not signed in</strong>
+            <span id="accountStatus">Microsoft account required</span>
+          </div>
+          <button class="account-btn" id="accountBtn" type="button" title="Microsoft sign in">
+            <i data-lucide="log-in"></i>
+          </button>
+        </div>
+
+        <nav class="nav-list" aria-label="Main navigation">
+          <button class="nav-item is-active" data-view="home" type="button">
+            <i data-lucide="layout-dashboard"></i>
+            Home
+          </button>
+          <button class="nav-item" data-view="profiles" type="button">
+            <i data-lucide="layers-3"></i>
+            Profiles
+          </button>
+          <button class="nav-item" data-view="mods" type="button">
+            <i data-lucide="blocks"></i>
+            Mods
+          </button>
+          <button class="nav-item" data-view="performance" type="button">
+            <i data-lucide="activity"></i>
+            Performance
+          </button>
+          <button class="nav-item" data-view="servers" type="button">
+            <i data-lucide="server"></i>
+            Servers
+          </button>
+          <button class="nav-item" data-view="cosmetics" type="button">
+            <i data-lucide="sparkles"></i>
+            Cosmetics
+          </button>
+          <button class="nav-item" data-view="settings" type="button">
+            <i data-lucide="settings-2"></i>
+            Settings
+          </button>
         </nav>
-        <div class="rail-status">
-          <span class="status-dot"></span>
-          <span id="bridge-status">Connecting</span>
+
+        <div class="sidebar__footer">
+          <div class="meter">
+            <div class="meter__label">
+              <span>Optimization</span>
+              <strong id="optimizationScore">92%</strong>
+            </div>
+            <div class="meter__track">
+              <span id="optimizationBar"></span>
+            </div>
+          </div>
+          <button class="primary-btn primary-btn--compact" id="quickBoostBtn" type="button">
+            <i data-lucide="rocket"></i>
+            Boost
+          </button>
         </div>
       </aside>
 
-      <main class="workspace">
-        <header class="topbar">
-          <div>
-            <p class="section-label">Runtime</p>
-            <h1>Desktop Control</h1>
+      <main class="main-stage">
+        <section class="view is-active" id="home" aria-label="Home">
+          <div class="hero-panel">
+            <div class="hero-panel__content">
+              <div class="eyebrow">
+                <span></span>
+                Minecraft client
+              </div>
+              <h1>BIW Client</h1>
+              <p>A clean client for profiles, modules, performance settings, servers, and cosmetics without visual noise.</p>
+              <div class="hero-actions">
+                <label class="version-picker" title="Minecraft version">
+                  <i data-lucide="box"></i>
+                  <select id="versionSelect" aria-label="Minecraft version">
+                    <option value="1.20.6">1.20.6</option>
+                  </select>
+                </label>
+                <button class="launch-btn" id="launchBtn" type="button">
+                  <i data-lucide="play"></i>
+                  Launch
+                </button>
+                <button class="ghost-btn" id="loginHeroBtn" type="button">
+                  <i data-lucide="log-in"></i>
+                  Sign in
+                </button>
+              </div>
+              <div class="setup-banner" id="microsoftSetupBanner" hidden>
+                <i data-lucide="circle-alert"></i>
+                <div>
+                  <strong>Microsoft setup required</strong>
+                  <span id="configPathInline">Create config.local.json and add microsoftClientId.</span>
+                </div>
+              </div>
+            </div>
+            <div class="hero-panel__loadout">
+              <div class="mini-stat">
+                <span>Latency</span>
+                <strong id="latencyValue">18 ms</strong>
+              </div>
+              <div class="mini-stat">
+                <span>Memory</span>
+                <strong id="memoryValue">6 GB</strong>
+              </div>
+              <div class="mini-stat">
+                <span>Build</span>
+                <strong>Forge+</strong>
+              </div>
+            </div>
           </div>
-          <div class="actions">
-            <button id="refresh-info" class="icon-button" type="button" aria-label="Refresh app info" title="Refresh app info">R</button>
-            <button id="ping" class="primary-button" type="button">Run Check</button>
-          </div>
-        </header>
 
-        <section class="summary-grid" aria-label="Runtime summary">
-          <article class="metric">
-            <span class="metric-label">Backend</span>
-            <strong id="backend-name">Dolet</strong>
-            <small id="backend-mode">waiting</small>
-          </article>
-          <article class="metric">
-            <span class="metric-label">Bridge</span>
-            <strong id="bridge-mode">CEF</strong>
-            <small id="last-run">not run</small>
-          </article>
-          <article class="metric">
-            <span class="metric-label">Window</span>
-            <strong>Native</strong>
-            <small>Chromium embedded</small>
-          </article>
+          <div class="dashboard-grid dashboard-grid--home">
+            <article class="panel launch-panel">
+              <div class="panel__header">
+                <div>
+                  <span class="panel-kicker">Selected Profile</span>
+                  <h2>Ranked PvP</h2>
+                </div>
+                <button class="icon-btn" data-view-link="profiles" type="button" aria-label="Edit profile" title="Edit profile">
+                  <i data-lucide="pencil"></i>
+                </button>
+              </div>
+              <div class="profile-summary">
+                <div>
+                  <span>Version</span>
+                  <strong id="selectedVersionLabel">1.20.6 Vanilla</strong>
+                </div>
+                <div>
+                  <span>Account</span>
+                  <strong id="accountHealthLabel">Offline</strong>
+                </div>
+                <div>
+                  <span>Modules</span>
+                  <strong id="moduleCountLabel">0 active</strong>
+                </div>
+              </div>
+              <div class="launch-progress" id="launchProgress">
+                <span></span>
+              </div>
+              <div class="launch-status-line">
+                <span id="launchStatusText">Ready</span>
+                <strong id="launchPercentText">0%</strong>
+              </div>
+              <div class="launch-log" id="launchLog" aria-live="polite">
+                <span>Waiting for launch.</span>
+              </div>
+            </article>
+
+            <article class="panel">
+              <div class="panel__header">
+                <div>
+                  <span class="panel-kicker">Session Health</span>
+                  <h2>Live Telemetry</h2>
+                </div>
+                <span class="pulse-dot"></span>
+              </div>
+              <canvas class="chart" id="fpsChart" height="150" aria-label="FPS chart"></canvas>
+              <div class="chart-labels">
+                <span>Avg 232</span>
+                <span>1% low 144</span>
+                <span>CPU 38%</span>
+              </div>
+            </article>
+
+            <article class="panel">
+              <div class="panel__header">
+                <div>
+                  <span class="panel-kicker">Quick Modules</span>
+                  <h2>Combat Stack</h2>
+                </div>
+              </div>
+              <div class="toggle-list" id="quickModules"></div>
+            </article>
+
+            <article class="panel server-spotlight">
+              <div class="panel__header">
+                <div>
+                  <span class="panel-kicker">Recommended Server</span>
+                  <h2>Hypixel Network</h2>
+                </div>
+                <span class="server-ping">42 ms</span>
+              </div>
+              <div class="server-visual">
+                <div class="server-orbit server-orbit--one"></div>
+                <div class="server-orbit server-orbit--two"></div>
+                <i data-lucide="swords"></i>
+              </div>
+              <button class="secondary-btn" type="button" id="joinServerBtn">
+                <i data-lucide="plug-zap"></i>
+                Join Queue
+              </button>
+            </article>
+          </div>
         </section>
 
-        <section class="content-grid">
-          <article class="work-panel">
-            <div class="panel-header">
-              <div>
-                <p class="section-label">Jobs</p>
-                <h2>Build Queue</h2>
+        <section class="view" id="profiles" aria-label="Profiles">
+          <div class="section-heading">
+            <div>
+              <span class="panel-kicker">Launch Profiles</span>
+              <h2>Profiles</h2>
+            </div>
+            <button class="primary-btn" id="newProfileBtn" type="button">
+              <i data-lucide="plus"></i>
+              New
+            </button>
+          </div>
+          <div class="profile-grid">
+            <article class="profile-tile is-selected">
+              <div class="tile-topline">
+                <i data-lucide="crosshair"></i>
+                <span>Active</span>
               </div>
-              <span class="pill">Live</span>
-            </div>
-            <div class="job-list">
-              <button class="job selected" type="button">
-                <span class="job-icon">01</span>
-                <span>
-                  <strong>Compile backend</strong>
-                  <small>Dolet command route</small>
-                </span>
-                <span class="job-state">Ready</span>
-              </button>
-              <button class="job" type="button">
-                <span class="job-icon">02</span>
-                <span>
-                  <strong>Render interface</strong>
-                  <small>HTML and CSS surface</small>
-                </span>
-                <span class="job-state muted">Idle</span>
-              </button>
-              <button class="job" type="button">
-                <span class="job-icon">03</span>
-                <span>
-                  <strong>Package runtime</strong>
-                  <small>CEF resources and app files</small>
-                </span>
-                <span class="job-state muted">Idle</span>
-              </button>
-            </div>
-          </article>
+              <h3>Ranked PvP</h3>
+              <p>Fabric 1.20.6, 18 modules, sodium stack, compact HUD.</p>
+              <div class="tag-row">
+                <span>Low latency</span>
+                <span>144+ FPS</span>
+                <span>Hypixel</span>
+              </div>
+            </article>
+            <article class="profile-tile">
+              <div class="tile-topline">
+                <i data-lucide="mountain"></i>
+                <span>Visual</span>
+              </div>
+              <h3>Survival Ultra</h3>
+              <p>Iris shaders, minimap, replay tools, rich inventory overlay.</p>
+              <div class="tag-row">
+                <span>Shaders</span>
+                <span>Replay</span>
+                <span>QoL</span>
+              </div>
+            </article>
+            <article class="profile-tile">
+              <div class="tile-topline">
+                <i data-lucide="flame"></i>
+                <span>Hot</span>
+              </div>
+              <h3>Bedwars Sweat</h3>
+              <p>Fast launch, bridge overlay, party tools, tactical hit color.</p>
+              <div class="tag-row">
+                <span>Bridge</span>
+                <span>Party</span>
+                <span>HUD</span>
+              </div>
+            </article>
+          </div>
+        </section>
 
-          <article class="work-panel response-panel">
-            <div class="panel-header">
-              <div>
-                <p class="section-label">Response</p>
-                <h2>Dolet IPC</h2>
-              </div>
-              <span id="response-chip" class="pill neutral">Waiting</span>
+        <section class="view" id="mods" aria-label="Mods">
+          <div class="section-heading">
+            <div>
+              <span class="panel-kicker">Module Library</span>
+              <h2>Mods</h2>
             </div>
-            <pre id="output">{
-  "status": "ready"
-}</pre>
-          </article>
+            <label class="search-box">
+              <i data-lucide="search"></i>
+              <input id="modSearch" type="search" placeholder="Search modules" autocomplete="off" />
+            </label>
+          </div>
+          <div class="mod-toolbar">
+            <button class="chip is-active" data-filter="all" type="button">All</button>
+            <button class="chip" data-filter="pvp" type="button">PvP</button>
+            <button class="chip" data-filter="visual" type="button">Visual</button>
+            <button class="chip" data-filter="utility" type="button">Utility</button>
+            <button class="chip" data-filter="performance" type="button">Performance</button>
+          </div>
+          <div class="mod-grid" id="modGrid"></div>
+        </section>
+
+        <section class="view" id="performance" aria-label="Performance">
+          <div class="section-heading">
+            <div>
+              <span class="panel-kicker">Engine Control</span>
+              <h2>Performance</h2>
+            </div>
+            <button class="secondary-btn" id="autoTuneBtn" type="button">
+              <i data-lucide="wand-sparkles"></i>
+              Auto Tune
+            </button>
+          </div>
+          <div class="dashboard-grid dashboard-grid--settings">
+            <article class="panel control-panel">
+              <div class="control-row">
+                <div>
+                  <strong>Allocated RAM</strong>
+                  <span id="ramReadout">6 GB</span>
+                </div>
+                <input class="range" id="ramSlider" type="range" min="2" max="16" value="6" />
+              </div>
+              <div class="control-row">
+                <div>
+                  <strong>FPS Cap</strong>
+                  <span id="fpsReadout">240 FPS</span>
+                </div>
+                <input class="range" id="fpsSlider" type="range" min="60" max="360" step="30" value="240" />
+              </div>
+              <div class="control-row">
+                <div>
+                  <strong>Chunk Radius</strong>
+                  <span id="chunkReadout">12 chunks</span>
+                </div>
+                <input class="range" id="chunkSlider" type="range" min="4" max="32" value="12" />
+              </div>
+            </article>
+
+            <article class="panel">
+              <div class="panel__header">
+                <div>
+                  <span class="panel-kicker">Boost Stack</span>
+                  <h2>Optimization</h2>
+                </div>
+              </div>
+              <div class="toggle-list" id="performanceModules"></div>
+            </article>
+
+            <article class="panel tall-panel">
+              <div class="panel__header">
+                <div>
+                  <span class="panel-kicker">Frame Stability</span>
+                  <h2>Frame Pacing</h2>
+                </div>
+                <strong class="score-badge">A+</strong>
+              </div>
+              <div class="stability-ring" aria-hidden="true">
+                <span>97</span>
+              </div>
+              <div class="profile-summary profile-summary--compact">
+                <div>
+                  <span>Microstutter</span>
+                  <strong>Low</strong>
+                </div>
+                <div>
+                  <span>Input Delay</span>
+                  <strong>3.4 ms</strong>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" id="servers" aria-label="Servers">
+          <div class="section-heading">
+            <div>
+              <span class="panel-kicker">Network Browser</span>
+              <h2>Servers</h2>
+            </div>
+            <button class="primary-btn" id="addServerBtn" type="button">
+              <i data-lucide="plus"></i>
+              Add
+            </button>
+          </div>
+          <div class="server-grid" id="serverGrid"></div>
+        </section>
+
+        <section class="view" id="cosmetics" aria-label="Cosmetics">
+          <div class="section-heading">
+            <div>
+              <span class="panel-kicker">Style Locker</span>
+              <h2>Cosmetics</h2>
+            </div>
+            <button class="secondary-btn" id="randomizeCosmeticBtn" type="button">
+              <i data-lucide="shuffle"></i>
+              Shuffle
+            </button>
+          </div>
+          <div class="cosmetic-layout">
+            <article class="skin-preview">
+              <div class="skin-head">
+                <span></span>
+              </div>
+              <div class="skin-body"></div>
+              <div class="skin-arm skin-arm--left"></div>
+              <div class="skin-arm skin-arm--right"></div>
+              <div class="skin-leg skin-leg--left"></div>
+              <div class="skin-leg skin-leg--right"></div>
+            </article>
+            <div class="cosmetic-grid">
+              <button class="cosmetic-tile is-selected" type="button">
+                <i data-lucide="crown"></i>
+                Shadow Crown
+              </button>
+              <button class="cosmetic-tile" type="button">
+                <i data-lucide="badge"></i>
+                Ranked Cape
+              </button>
+              <button class="cosmetic-tile" type="button">
+                <i data-lucide="sparkle"></i>
+                Hit Aura
+              </button>
+              <button class="cosmetic-tile" type="button">
+                <i data-lucide="scan-face"></i>
+                Face Glow
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" id="settings" aria-label="Settings">
+          <div class="section-heading">
+            <div>
+              <span class="panel-kicker">Client Setup</span>
+              <h2>Settings</h2>
+            </div>
+            <div class="settings-actions">
+              <label class="search-box">
+                <i data-lucide="search"></i>
+                <input id="settingsSearch" type="search" placeholder="Search settings" autocomplete="off" />
+              </label>
+              <button class="secondary-btn" id="selectDirBtn" type="button">
+                <i data-lucide="folder-open"></i>
+                Game Folder
+              </button>
+            </div>
+          </div>
+
+          <div class="settings-groups">
+            <article class="settings-group">
+              <div class="settings-group__head">
+                <i data-lucide="user-cog"></i>
+                <div>
+                  <strong>Account &amp; Files</strong>
+                  <span>Authentication and local paths</span>
+                </div>
+              </div>
+              <div class="settings-list">
+                <article class="settings-row">
+                  <div>
+                    <strong>Microsoft Auth</strong>
+                    <span id="clientIdStatus">Checking client id</span>
+                  </div>
+                  <i data-lucide="key-round"></i>
+                </article>
+                <article class="settings-row">
+                  <div>
+                    <strong>Local Config</strong>
+                    <span id="configPath">config.local.json</span>
+                  </div>
+                  <i data-lucide="file-code-2"></i>
+                </article>
+                <article class="settings-row">
+                  <div>
+                    <strong>Minecraft Directory</strong>
+                    <span id="gameDirectory">Default launcher path</span>
+                  </div>
+                  <i data-lucide="hard-drive"></i>
+                </article>
+                <article class="settings-row">
+                  <div>
+                    <strong>Keep Launcher Open</strong>
+                    <span>Stay open after the game starts</span>
+                  </div>
+                  <label class="switch">
+                    <input data-setting="keepOpen" type="checkbox" checked />
+                    <span></span>
+                  </label>
+                </article>
+                <article class="settings-row">
+                  <div>
+                    <strong>Auto Login</strong>
+                    <span>Sign in on startup</span>
+                  </div>
+                  <label class="switch">
+                    <input data-setting="autoLogin" type="checkbox" checked />
+                    <span></span>
+                  </label>
+                </article>
+              </div>
+            </article>
+
+            <article class="settings-group">
+              <div class="settings-group__head">
+                <i data-lucide="flask-conical"></i>
+                <div>
+                  <strong>Offline / Dev Mode</strong>
+                  <span>Launch without sign-in for testing</span>
+                </div>
+              </div>
+              <div class="settings-list">
+                <article class="settings-row">
+                  <div>
+                    <strong>Offline Mode</strong>
+                    <span>Skip Microsoft login (single-player only)</span>
+                  </div>
+                  <label class="switch">
+                    <input id="offlineModeSwitch" type="checkbox" />
+                    <span></span>
+                  </label>
+                </article>
+                <article class="settings-row">
+                  <div>
+                    <strong>Offline Name</strong>
+                    <span>1-16 letters, numbers or _</span>
+                  </div>
+                  <label class="search-box">
+                    <i data-lucide="user"></i>
+                    <input id="offlineNameInput" type="text" maxlength="16" placeholder="Player" autocomplete="off" />
+                  </label>
+                </article>
+                <article class="settings-row">
+                  <div>
+                    <strong>Note</strong>
+                    <span>Official servers reject offline accounts</span>
+                  </div>
+                  <i data-lucide="info"></i>
+                </article>
+              </div>
+            </article>
+
+            <article class="settings-group">
+              <div class="settings-group__head">
+                <i data-lucide="monitor-play"></i>
+                <div>
+                  <strong>Video &amp; Performance</strong>
+                  <span>Renderer and frame settings</span>
+                </div>
+              </div>
+              <div class="settings-list">
+                <article class="settings-row settings-row--slider">
+                  <div>
+                    <strong>Render Distance</strong>
+                    <span id="renderReadout">12 chunks</span>
+                  </div>
+                  <input class="range" data-setting="render" type="range" min="2" max="32" value="12" />
+                </article>
+                <article class="settings-row settings-row--slider">
+                  <div>
+                    <strong>Max Framerate</strong>
+                    <span id="maxFpsReadout">240 FPS</span>
+                  </div>
+                  <input class="range" data-setting="maxFps" type="range" min="30" max="360" step="30" value="240" />
+                </article>
+                <article class="settings-row settings-row--slider">
+                  <div>
+                    <strong>Brightness (Gamma)</strong>
+                    <span id="gammaReadout">100%</span>
+                  </div>
+                  <input class="range" data-setting="gamma" type="range" min="0" max="200" value="100" />
+                </article>
+                <article class="settings-row">
+                  <div>
+                    <strong>Graphics Quality</strong>
+                    <span>Fast, Fancy or Fabulous</span>
+                  </div>
+                  <div class="seg-control" data-setting="graphics">
+                    <button class="seg-btn" data-value="fast" type="button">Fast</button>
+                    <button class="seg-btn is-active" data-value="fancy" type="button">Fancy</button>
+                    <button class="seg-btn" data-value="fabulous" type="button">Fabulous</button>
+                  </div>
+                </article>
+                <article class="settings-row">
+                  <div>
+                    <strong>VSync</strong>
+                    <span>Sync frames to display</span>
+                  </div>
+                  <label class="switch">
+                    <input data-setting="vsync" type="checkbox" />
+                    <span></span>
+                  </label>
+                </article>
+                <article class="settings-row">
+                  <div>
+                    <strong>Fullscreen</strong>
+                    <span>Launch in fullscreen mode</span>
+                  </div>
+                  <label class="switch">
+                    <input data-setting="fullscreen" type="checkbox" checked />
+                    <span></span>
+                  </label>
+                </article>
+              </div>
+            </article>
+
+            <article class="settings-group">
+              <div class="settings-group__head">
+                <i data-lucide="layout-template"></i>
+                <div>
+                  <strong>HUD &amp; Overlays</strong>
+                  <span>On-screen information</span>
+                </div>
+              </div>
+              <div class="settings-list">
+                <article class="settings-row">
+                  <div>
+                    <strong>FPS Counter</strong>
+                    <span>Show live framerate</span>
+                  </div>
+                  <label class="switch">
+                    <input data-setting="hudFps" type="checkbox" checked />
+                    <span></span>
+                  </label>
+                </article>
+                <article class="settings-row">
+                  <div>
+                    <strong>CPS Counter</strong>
+                    <span>Clicks per second display</span>
+                  </div>
+                  <label class="switch">
+                    <input data-setting="hudCps" type="checkbox" checked />
+                    <span></span>
+                  </label>
+                </article>
+                <article class="settings-row">
+                  <div>
+                    <strong>Keystrokes</strong>
+                    <span>Show pressed keys overlay</span>
+                  </div>
+                  <label class="switch">
+                    <input data-setting="hudKeystrokes" type="checkbox" checked />
+                    <span></span>
+                  </label>
+                </article>
+                <article class="settings-row">
+                  <div>
+                    <strong>Coordinates</strong>
+                    <span>Display XYZ position</span>
+                  </div>
+                  <label class="switch">
+                    <input data-setting="hudCoords" type="checkbox" />
+                    <span></span>
+                  </label>
+                </article>
+                <article class="settings-row">
+                  <div>
+                    <strong>Ping Display</strong>
+                    <span>Show network latency</span>
+                  </div>
+                  <label class="switch">
+                    <input data-setting="hudPing" type="checkbox" checked />
+                    <span></span>
+                  </label>
+                </article>
+                <article class="settings-row settings-row--slider">
+                  <div>
+                    <strong>HUD Scale</strong>
+                    <span id="hudScaleReadout">100%</span>
+                  </div>
+                  <input class="range" data-setting="hudScale" type="range" min="50" max="150" step="5" value="100" />
+                </article>
+              </div>
+            </article>
+
+            <article class="settings-group">
+              <div class="settings-group__head">
+                <i data-lucide="gamepad-2"></i>
+                <div>
+                  <strong>Gameplay</strong>
+                  <span>Quality of life helpers</span>
+                </div>
+              </div>
+              <div class="settings-list">
+                <article class="settings-row settings-row--slider">
+                  <div>
+                    <strong>Zoom Level</strong>
+                    <span id="zoomReadout">4x</span>
+                  </div>
+                  <input class="range" data-setting="zoom" type="range" min="2" max="10" value="4" />
+                </article>
+                <article class="settings-row">
+                  <div>
+                    <strong>Toggle Sprint</strong>
+                    <span>Hold-free sprinting</span>
+                  </div>
+                  <label class="switch">
+                    <input data-setting="toggleSprint" type="checkbox" checked />
+                    <span></span>
+                  </label>
+                </article>
+                <article class="settings-row">
+                  <div>
+                    <strong>Toggle Sneak</strong>
+                    <span>Hold-free sneaking</span>
+                  </div>
+                  <label class="switch">
+                    <input data-setting="toggleSneak" type="checkbox" />
+                    <span></span>
+                  </label>
+                </article>
+                <article class="settings-row">
+                  <div>
+                    <strong>SOP Mode</strong>
+                    <span>Press 1-9 to use and throw that soup slot</span>
+                  </div>
+                  <label class="switch">
+                    <input data-setting="sopMode" type="checkbox" />
+                    <span></span>
+                  </label>
+                </article>
+                <article class="settings-row">
+                  <div>
+                    <strong>Hit Color</strong>
+                    <span>Tint entities when hit</span>
+                  </div>
+                  <label class="switch">
+                    <input data-setting="hitColor" type="checkbox" checked />
+                    <span></span>
+                  </label>
+                </article>
+                <article class="settings-row">
+                  <div>
+                    <strong>Old Animations</strong>
+                    <span>1.7-style attack swing</span>
+                  </div>
+                  <label class="switch">
+                    <input data-setting="oldAnimations" type="checkbox" />
+                    <span></span>
+                  </label>
+                </article>
+              </div>
+            </article>
+
+            <article class="settings-group">
+              <div class="settings-group__head">
+                <i data-lucide="bell"></i>
+                <div>
+                  <strong>Integrations &amp; Notifications</strong>
+                  <span>Discord and alerts</span>
+                </div>
+              </div>
+              <div class="settings-list">
+                <article class="settings-row">
+                  <div>
+                    <strong>Discord Rich Presence</strong>
+                    <span>Profile and server state</span>
+                  </div>
+                  <label class="switch">
+                    <input data-setting="discord" type="checkbox" checked />
+                    <span></span>
+                  </label>
+                </article>
+                <article class="settings-row">
+                  <div>
+                    <strong>Launch Sound</strong>
+                    <span>Play a sound on start</span>
+                  </div>
+                  <label class="switch">
+                    <input data-setting="launchSound" type="checkbox" checked />
+                    <span></span>
+                  </label>
+                </article>
+                <article class="settings-row">
+                  <div>
+                    <strong>Update Notifications</strong>
+                    <span>Alert on new versions</span>
+                  </div>
+                  <label class="switch">
+                    <input data-setting="updateNotify" type="checkbox" checked />
+                    <span></span>
+                  </label>
+                </article>
+              </div>
+            </article>
+
+            <article class="settings-group">
+              <div class="settings-group__head">
+                <i data-lucide="palette"></i>
+                <div>
+                  <strong>Appearance</strong>
+                  <span>Theme and layout</span>
+                </div>
+              </div>
+              <div class="settings-list">
+                <article class="settings-row">
+                  <div>
+                    <strong>Accent Color</strong>
+                    <span>Applied instantly</span>
+                  </div>
+                  <div class="swatches" id="swatches">
+                    <button class="swatch is-active" data-accent="#f5c84b" style="--swatch: #f5c84b" type="button" aria-label="Yellow"></button>
+                    <button class="swatch" data-accent="#7aa2ff" style="--swatch: #7aa2ff" type="button" aria-label="Blue"></button>
+                    <button class="swatch" data-accent="#d87a4a" style="--swatch: #d87a4a" type="button" aria-label="Copper"></button>
+                    <button class="swatch" data-accent="#e6e8ee" style="--swatch: #e6e8ee" type="button" aria-label="White"></button>
+                  </div>
+                </article>
+                <article class="settings-row">
+                  <div>
+                    <strong>Theme Density</strong>
+                    <span>Compact controls</span>
+                  </div>
+                  <label class="switch">
+                    <input id="densitySwitch" type="checkbox" />
+                    <span></span>
+                  </label>
+                </article>
+                <article class="settings-row">
+                  <div>
+                    <strong>Background Effects</strong>
+                    <span>Scanlines and glow</span>
+                  </div>
+                  <label class="switch">
+                    <input data-setting="bgEffects" type="checkbox" checked />
+                    <span></span>
+                  </label>
+                </article>
+              </div>
+            </article>
+          </div>
         </section>
       </main>
     </div>
-    <script src="app.js"></script>
+
+    <div class="toast-stack" id="toastStack" aria-live="polite"></div>
+
+    <div class="launch-overlay" id="launchOverlay" aria-hidden="true">
+      <div class="launch-card">
+        <div class="brand-mark brand-mark--large" aria-hidden="true">
+          <span></span>
+        </div>
+        <h2>Launching BIW Client</h2>
+        <p id="launchStep">Preparing runtime</p>
+        <div class="launch-progress launch-progress--large">
+          <span id="overlayProgress"></span>
+        </div>
+      </div>
+    </div>
+
+    <script src="../node_modules/lucide/dist/umd/lucide.js"></script>
+    <script src="./app.js"></script>
   </body>
 </html>

@@ -1,0 +1,5 @@
+{
+  "microsoftClientId": "YOUR_AZURE_APP_CLIENT_ID",
+  "authPort": 42829,
+  "minecraftDirectory": "~/.biw-client/minecraft"
+}
