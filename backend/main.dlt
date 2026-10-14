@@ -3,6 +3,6 @@ import std
 fun ping(name: str, payload: str) -> str:
     return "{\"ok\":true,\"message\":\"pong from Dolet\",\"payload\":" + payload + "}"
 
-app: DesktopApp = DesktopApp.create("simple-web-application-sooryn", "frontend/index.html")
+app: DesktopApp = DesktopApp.create("simple-web-application-eqoi", "frontend/index.html")
 app.command("ping", ping as i64)
 app.run()

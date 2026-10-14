@@ -65,7 +65,7 @@ live in the launch panel.
 
 ## Notes
 
-- The original Sooryn/Dolet entry (`backend/main.dlt`, `sooryn.app`) is kept
+- The original Eqoi/Dolet entry (`backend/main.dlt`, `eqoi.app`) is kept
   for reference; the launcher itself runs on Electron because the launch and
   install layer depends on `@xmcl`.
 - `config.local.json` is git-ignored. Never commit your client id secrets.
